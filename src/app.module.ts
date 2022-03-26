@@ -3,7 +3,7 @@ import { configEnvironment } from './packages/env-config/env-config';
 import { AuthMiddleware } from './packages/middlewares/auth.middleware';
 import { publicUrls } from './public.url';
 import { configTypeorm } from './packages/typeorm-config/typeorm.config';
-import { RoleModule } from './api/role/role.module';
+import { GroupModule } from './api/group/group.module';
 import { UserModule } from './api/users/user.module';
 import { AuthModule } from './api/auth/auth.module';
 import { FilesModule } from './api/files/files.module';
@@ -13,7 +13,7 @@ import { FilesModule } from './api/files/files.module';
     configEnvironment(),
     configTypeorm(),
     AuthModule,
-    RoleModule,
+    GroupModule,
     UserModule,
     FilesModule,
   ],

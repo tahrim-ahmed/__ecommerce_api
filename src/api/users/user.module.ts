@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './service/user.service';
 import { UserController } from './controller/user.controller';
-import { RoleService } from '../role/service/role.service';
-import { RoleController } from '../role/controller/role.controller';
+import { GroupService } from '../group/service/group.service';
+import { GroupController } from '../group/controller/group.controller';
 import { UserEntity } from '../../packages/entities/user/user.entity';
 import { GroupEntity } from '../../packages/entities/user/group.entity';
 import { UserGroupEntity } from '../../packages/entities/user/user-group.entity';
@@ -18,13 +18,13 @@ import { PermissionService } from '../../packages/services/permission.service';
   exports: [UserService],
   providers: [
     UserService,
-    RoleService,
+    GroupService,
     ResponseService,
     BcryptService,
     ExceptionService,
     RequestService,
     PermissionService,
   ],
-  controllers: [UserController, RoleController],
+  controllers: [UserController, GroupController],
 })
 export class UserModule {}

@@ -186,7 +186,7 @@ export class UserService {
 
       if (search) {
         query.andWhere(
-          '((q.firstName ILIKE  :search) OR (q.lastName ILIKE  :search) OR (q.phone ILIKE  :search) OR (q.email ILIKE  :search))',
+          '((q.firstName LIKE  :search) OR (q.lastName LIKE  :search) OR (q.phone LIKE  :search) OR (q.email LIKE  :search))',
           { search: `%${search}%` },
         );
       }
@@ -196,12 +196,12 @@ export class UserService {
           let direction: 'DESC' | 'ASC' = 'DESC';
           if (['DESC', 'ASC'].includes(order.toUpperCase())) {
             direction = order.toUpperCase() as 'DESC' | 'ASC';
-            query.orderBy(`q.${sort}`, direction, 'NULLS LAST');
+            query.orderBy(`q.${sort}`, direction);
           } else {
-            query.orderBy(`q.${sort}`, direction, 'NULLS LAST');
+            query.orderBy(`q.${sort}`, direction);
           }
         } else {
-          query.orderBy(`q.${sort}`, 'DESC', 'NULLS LAST');
+          query.orderBy(`q.${sort}`, 'DESC');
         }
       } else {
         query.orderBy(`q.updatedAt`, 'DESC', 'NULLS LAST');
