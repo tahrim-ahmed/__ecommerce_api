@@ -1,0 +1,8 @@
+export enum PermissionName {
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  MANAGEMENT = 'MANAGEMENT',
+  SELLER = 'SELLER',
+  DELIVERY = 'DELIVERY',
+  CUSTOMER = 'CUSTOMER',
+}
