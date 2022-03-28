@@ -6,6 +6,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateUserDto extends UserDto {
   @ApiProperty({ enum: UserType, enumName: 'user type' })
   @IsNotEmpty({ message: 'Must be non empty' })
-  @IsEnum(UserType, { message: 'Must be a valid user type [1-2]' })
+  @IsEnum(UserType, { message: 'Must be a valid user type [1-6]' })
   type: UserType;
 }

@@ -73,13 +73,13 @@ export class UserController {
 
   @ApiBody({ type: UserDto })
   @Post('registration')
-  create(
+  registration(
     @Body(
       new DtoValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
     )
     createUserDto: UserDto,
   ): Promise<ResponseDto> {
-    const userDto = this.userService.create(createUserDto);
+    const userDto = this.userService.registration(createUserDto);
 
     return this.responseService.toDtoResponse(
       HttpStatus.CREATED,

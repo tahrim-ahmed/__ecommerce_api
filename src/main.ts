@@ -26,7 +26,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(NEST_APP, config);
-  SwaggerModule.setup('pay-site-api', NEST_APP, document);
+  SwaggerModule.setup('ecommerce-api', NEST_APP, document);
 
   const configService = NEST_APP.get(ConfigService);
   const port = configService.get<number>('PORT');

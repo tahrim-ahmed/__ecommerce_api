@@ -13,12 +13,14 @@ import { ExceptionService } from '../../packages/services/exception.service';
 import { RequestService } from '../../packages/services/request.service';
 import { PermissionService } from '../../packages/services/permission.service';
 import { UserPermissionEntity } from '../../packages/entities/user/user-permission.entity';
+import { PermissionEntity } from '../../packages/entities/user/permission.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       UserEntity,
       GroupEntity,
+      PermissionEntity,
       UserGroupEntity,
       UserPermissionEntity,
     ]),
@@ -32,7 +34,6 @@ import { UserPermissionEntity } from '../../packages/entities/user/user-permissi
     BcryptService,
     ExceptionService,
     RequestService,
-    PermissionService,
   ],
   controllers: [UserController, GroupController],
 })

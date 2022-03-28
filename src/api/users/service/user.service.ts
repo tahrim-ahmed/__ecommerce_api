@@ -19,6 +19,11 @@ import { RoleName } from '../../../packages/enum/group-name.enum';
 import { ChangePasswordDto } from '../../../packages/dto/user/change-password.dto';
 import { DeleteDto } from '../../../packages/dto/response/delete.dto';
 import { UserGroupDto } from '../../../packages/dto/user/user-group.dto';
+import { UserType } from '../../../packages/enum/user-type.enum';
+import { CreateUserDto } from '../../../packages/dto/user/create/create-user.dto';
+import { PermissionEntity } from '../../../packages/entities/user/permission.entity';
+import { UserPermissionEntity } from '../../../packages/entities/user/user-permission.entity';
+import { PermissionName } from '../../../packages/enum/permission-name.enum';
 
 @Injectable()
 export class UserService {
@@ -27,8 +32,12 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(GroupEntity)
     private readonly roleRepository: Repository<GroupEntity>,
+    @InjectRepository(PermissionEntity)
+    private readonly permissionRepository: Repository<PermissionEntity>,
     @InjectRepository(UserGroupEntity)
     private readonly userRoleRepository: Repository<UserGroupEntity>,
+    @InjectRepository(UserPermissionEntity)
+    private readonly userPermissionRepository: Repository<UserPermissionEntity>,
     private readonly configService: ConfigService,
     private readonly responseService: ResponseService,
     private readonly exceptionService: ExceptionService,
@@ -89,6 +98,16 @@ export class UserService {
     }
   };
 
+  registration = async (userDto: UserDto): Promise<UserDto> => {
+    try {
+      const user = await this.createUser(userDto);
+
+      return plainToClass(UserDto, user);
+    } catch (error) {
+      throw new SystemException(error);
+    }
+  };
+
   create = async (userDto: UserDto): Promise<UserDto> => {
     try {
       const user = await this.createUser(userDto);
@@ -108,6 +127,48 @@ export class UserService {
     const savedUser = await this.userRepository.save(user);
 
     this.createUserTypeRole(savedUser);
+    this.createUserTypePermission(savedUser);
+
+    return savedUser;
+  };
+
+  createNewUser = async (createUserDto: CreateUserDto): Promise<UserEntity> => {
+    createUserDto.password = await this.bcryptService.hashPassword(
+      createUserDto.password,
+    );
+
+    let userDto = createUserDto as UserDto;
+    userDto = this.requestService.forCreate(userDto);
+    const user = this.userRepository.create(userDto);
+
+    const savedUser = await this.userRepository.save(user);
+
+    switch (createUserDto.type) {
+      case UserType.SUPER_ADMIN: {
+        await this.createNewUserTypeRole(savedUser, RoleName.SUPER_ADMIN);
+        break;
+      }
+      case UserType.ADMIN: {
+        await this.createNewUserTypeRole(savedUser, RoleName.ADMIN);
+        break;
+      }
+      case UserType.MANAGEMENT: {
+        await this.createNewUserTypeRole(savedUser, RoleName.MANAGEMENT);
+        break;
+      }
+      case UserType.SELLER: {
+        await this.createNewUserTypeRole(savedUser, RoleName.SELLER);
+        break;
+      }
+      case UserType.DELIVERY: {
+        await this.createNewUserTypeRole(savedUser, RoleName.DELIVERY);
+        break;
+      }
+      case UserType.CUSTOMER: {
+        await this.createNewUserTypeRole(savedUser, RoleName.CUSTOMER);
+        break;
+      }
+    }
     return savedUser;
   };
 
@@ -117,6 +178,40 @@ export class UserService {
     userRole.group = await this.getUserRole();
     userRole = this.requestService.forCreate(userRole);
     return Promise.resolve(!!(await this.userRoleRepository.save(userRole)));
+  };
+
+  createNewUserTypeRole = async (
+    user: UserEntity,
+    group: RoleName,
+  ): Promise<boolean> => {
+    let userRole = new UserGroupEntity();
+    userRole.user = user;
+    userRole.group = await this.getGroupByName(group);
+    userRole = this.requestService.forCreate(userRole);
+    return Promise.resolve(!!(await this.userRoleRepository.save(userRole)));
+  };
+
+  createUserTypePermission = async (user: UserEntity): Promise<boolean> => {
+    let userPermission = new UserPermissionEntity();
+    userPermission.user = user;
+    userPermission.permission = await this.getUserPermission();
+    userPermission = this.requestService.forCreate(userPermission);
+    return Promise.resolve(
+      !!(await this.userPermissionRepository.save(userPermission)),
+    );
+  };
+
+  createNewUserTypePermission = async (
+    user: UserEntity,
+    permission: PermissionName,
+  ): Promise<boolean> => {
+    let userPermission = new UserPermissionEntity();
+    userPermission.user = user;
+    userPermission.permission = await this.getPermissionByName(permission);
+    userPermission = this.requestService.forCreate(userPermission);
+    return Promise.resolve(
+      !!(await this.userPermissionRepository.save(userPermission)),
+    );
   };
 
   update = async (id: string, userDto: UserDto): Promise<UserDto> => {
@@ -264,6 +359,14 @@ export class UserService {
     });
   };
 
+  getUserPermission = async (): Promise<PermissionEntity> => {
+    return await this.permissionRepository.findOne({
+      where: {
+        permission: PermissionName.CUSTOMER,
+      },
+    });
+  };
+
   /************************ for login *******************/
 
   findRolesByUserId = async (id: string): Promise<UserGroupDto[]> => {
@@ -277,5 +380,27 @@ export class UserService {
     } catch (error) {
       throw new SystemException(error);
     }
+  };
+
+  getGroupByName = async (group: RoleName): Promise<GroupEntity> => {
+    const groupByName = await this.roleRepository.findOne({
+      where: {
+        group,
+      },
+    });
+    this.exceptionService.notFound(groupByName, 'Group not found!!');
+    return groupByName;
+  };
+
+  getPermissionByName = async (
+    permission: PermissionName,
+  ): Promise<PermissionEntity> => {
+    const permissionByName = await this.permissionRepository.findOne({
+      where: {
+        permission,
+      },
+    });
+    this.exceptionService.notFound(permissionByName, 'Permission not found!!');
+    return permissionByName;
   };
 }
