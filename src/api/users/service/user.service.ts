@@ -204,7 +204,7 @@ export class UserService {
           query.orderBy(`q.${sort}`, 'DESC');
         }
       } else {
-        query.orderBy(`q.updatedAt`, 'DESC', 'NULLS LAST');
+        query.orderBy(`q.updatedAt`, 'DESC');
       }
 
       if (page && limit) {
@@ -224,7 +224,7 @@ export class UserService {
       const user = await this.userRepository.findOne(
         { id },
         {
-          relations: relation ? ['groups'] : [],
+          relations: relation ? ['groups', 'permissions'] : [],
         },
       );
       this.exceptionService.notFound(user, 'User is not found');

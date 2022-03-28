@@ -8,7 +8,7 @@ import { UserResponseDto } from '../../../packages/dto/response/user-response.dt
 import { UserDto } from '../../../packages/dto/user/user.dto';
 import { SystemException } from '../../../packages/exceptions/system.exception';
 import { UserGroupDto } from '../../../packages/dto/user/user-group.dto';
-import { CustomUserRoleDto } from '../../../packages/dto/user/custom-user-role.dto';
+import { CustomUserGroupDto } from '../../../packages/dto/user/custom-user-group.dto';
 import { RoleName } from '../../../packages/enum/group-name.enum';
 import { ChangePasswordDto } from '../../../packages/dto/user/change-password.dto';
 import * as fs from 'fs';
@@ -82,9 +82,9 @@ export class AuthService {
     let isAdmin = false;
     let isCustomer = false;
 
-    const customUserRoleDtos = [];
+    const customUserGroupDtos = [];
     for (const userRole of userRoles) {
-      const customUserRoleDto = new CustomUserRoleDto();
+      const customUserRoleDto = new CustomUserGroupDto();
       customUserRoleDto.group = userRole.group?.group as RoleName;
 
       switch (userRole.group?.group as RoleName) {
@@ -98,7 +98,7 @@ export class AuthService {
           isCustomer = true;
           break;
       }
-      customUserRoleDtos.push(customUserRoleDto);
+      customUserGroupDtos.push(customUserRoleDto);
     }
 
     const userResponseDto = new UserResponseDto();
@@ -106,9 +106,10 @@ export class AuthService {
     userResponseDto.phone = userDto.phone;
     userResponseDto.userName =
       (userDto.firstName || '') + ' ' + (userDto.lastName || '');
-    userResponseDto.roles = customUserRoleDtos;
+    userResponseDto.group = customUserGroupDtos;
 
     userResponseDto.isSuperAdmin = isSuperAdmin;
+    userResponseDto.isAdmin = isAdmin;
     userResponseDto.isCustomer = isCustomer;
 
     return Promise.resolve(userResponseDto);

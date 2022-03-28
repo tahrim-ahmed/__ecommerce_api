@@ -7,6 +7,7 @@ import { GroupModule } from './api/group/group.module';
 import { UserModule } from './api/users/user.module';
 import { AuthModule } from './api/auth/auth.module';
 import { FilesModule } from './api/files/files.module';
+import { CategoryModule } from './api/category/category.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FilesModule } from './api/files/files.module';
     GroupModule,
     UserModule,
     FilesModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

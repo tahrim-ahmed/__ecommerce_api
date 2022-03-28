@@ -1,9 +1,9 @@
-import {IsBoolean, IsEnum, IsNotEmpty, IsString, MaxLength} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { BaseDto } from '../core/base.dto';
 import { UserGroupDto } from './user-group.dto';
-import { BooleanType } from "../../enum/boolean-type.enum";
+import { BooleanType } from '../../enum/boolean-type.enum';
 
 export class PermissionDto extends BaseDto {
   @ApiProperty()

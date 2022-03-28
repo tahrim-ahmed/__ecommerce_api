@@ -8,7 +8,7 @@ import { join } from 'path';
 export let NEST_APP: NestExpressApplication;
 
 async function bootstrap() {
-  const logger = new Logger('Pay-Site-api-bootstrap');
+  const logger = new Logger('ecommerce-api-bootstrap');
 
   NEST_APP = await NestFactory.create<NestExpressApplication>(AppModule);
   NEST_APP.setGlobalPrefix('api/v1');
@@ -19,10 +19,10 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Pay-Site')
-    .setDescription('The Pay-Site API description')
+    .setTitle('Ecommerce')
+    .setDescription('The Ecommerce API description')
     .setVersion('1.0')
-    .addTag('pay-site')
+    .addTag('ecommerce')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(NEST_APP, config);
@@ -36,7 +36,7 @@ async function bootstrap() {
   await NEST_APP.listen(port);
 
   logger.log(
-    `Documentation is running in http://localhost:${port}/pay-site-api`,
+    `Documentation is running in http://localhost:${port}/ecommerce-api`,
   );
   logger.log(`Api is running in http://localhost:${port}`);
 }

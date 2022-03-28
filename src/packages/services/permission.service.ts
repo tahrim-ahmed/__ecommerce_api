@@ -26,7 +26,7 @@ export class PermissionService {
   user = (): { userID: string; status: boolean } => {
     const user: UserResponseDto = this.request['_user'] as UserResponseDto;
     if (user) {
-      if (user.isUser) {
+      if (user.isCustomer) {
         return {
           userID: user.userID,
           status: true,

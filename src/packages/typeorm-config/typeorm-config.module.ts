@@ -6,6 +6,8 @@ import { UserEntity } from '../entities/user/user.entity';
 import { UserGroupEntity } from '../entities/user/user-group.entity';
 import { PermissionEntity } from '../entities/user/permission.entity';
 import { UserPermissionEntity } from '../entities/user/user-permission.entity';
+import { CategoryEntity } from '../entities/category/category.entity';
+import { SubCategoryEntity } from '../entities/category/sub-category.entity';
 
 @Global()
 @Module({
@@ -25,6 +27,8 @@ import { UserPermissionEntity } from '../entities/user/user-permission.entity';
           GroupEntity,
           PermissionEntity,
           UserPermissionEntity,
+          CategoryEntity,
+          SubCategoryEntity,
         ],
         synchronize: <boolean>(
           (configService.get<number>('DATABASE_SYNCRONIZE') == 1)
