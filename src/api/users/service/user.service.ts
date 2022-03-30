@@ -19,11 +19,12 @@ import { RoleName } from '../../../packages/enum/group-name.enum';
 import { ChangePasswordDto } from '../../../packages/dto/user/change-password.dto';
 import { DeleteDto } from '../../../packages/dto/response/delete.dto';
 import { UserGroupDto } from '../../../packages/dto/user/user-group.dto';
-import { UserType } from '../../../packages/enum/user-type.enum';
+import { UserType } from '../../../packages/enum/group-type.enum';
 import { CreateUserDto } from '../../../packages/dto/user/create/create-user.dto';
 import { PermissionEntity } from '../../../packages/entities/user/permission.entity';
 import { UserPermissionEntity } from '../../../packages/entities/user/user-permission.entity';
 import { PermissionName } from '../../../packages/enum/permission-name.enum';
+import { PermissionTypeEnum } from '../../../packages/enum/permission-type.enum';
 
 @Injectable()
 export class UserService {
@@ -108,9 +109,9 @@ export class UserService {
     }
   };
 
-  create = async (userDto: UserDto): Promise<UserDto> => {
+  create = async (userDto: CreateUserDto): Promise<UserDto> => {
     try {
-      const user = await this.createUser(userDto);
+      const user = await this.createNewUser(userDto);
 
       return plainToClass(UserDto, user);
     } catch (error) {
@@ -166,6 +167,48 @@ export class UserService {
       }
       case UserType.CUSTOMER: {
         await this.createNewUserTypeRole(savedUser, RoleName.CUSTOMER);
+        break;
+      }
+    }
+
+    switch (createUserDto.permissionType) {
+      case PermissionTypeEnum.SUPER_ADMIN: {
+        await this.createNewUserTypePermission(
+          savedUser,
+          PermissionName.SUPER_ADMIN,
+        );
+        break;
+      }
+      case PermissionTypeEnum.ADMIN: {
+        await this.createNewUserTypePermission(savedUser, PermissionName.ADMIN);
+        break;
+      }
+      case PermissionTypeEnum.MANAGEMENT: {
+        await this.createNewUserTypePermission(
+          savedUser,
+          PermissionName.MANAGEMENT,
+        );
+        break;
+      }
+      case PermissionTypeEnum.SELLER: {
+        await this.createNewUserTypePermission(
+          savedUser,
+          PermissionName.SELLER,
+        );
+        break;
+      }
+      case PermissionTypeEnum.DELIVERY: {
+        await this.createNewUserTypePermission(
+          savedUser,
+          PermissionName.DELIVERY,
+        );
+        break;
+      }
+      case PermissionTypeEnum.CUSTOMER: {
+        await this.createNewUserTypePermission(
+          savedUser,
+          PermissionName.CUSTOMER,
+        );
         break;
       }
     }

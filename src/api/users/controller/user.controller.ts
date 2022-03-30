@@ -22,6 +22,7 @@ import { DtoValidationPipe } from '../../../packages/pipes/dto-validation.pipe';
 import { UserDto } from '../../../packages/dto/user/user.dto';
 import { IntValidationPipe } from '../../../packages/pipes/int-validation.pipe';
 import { UuidValidationPipe } from '../../../packages/pipes/uuid-validation.pipe';
+import { CreateUserDto } from '../../../packages/dto/user/create/create-user.dto';
 
 @ApiTags('User')
 @Controller('users')
@@ -84,6 +85,24 @@ export class UserController {
     return this.responseService.toDtoResponse(
       HttpStatus.CREATED,
       'Registration Success!!',
+      userDto,
+    );
+  }
+
+  @ApiBearerAuth()
+  @ApiBody({ type: CreateUserDto })
+  @Post('create')
+  create(
+    @Body(
+      new DtoValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+    )
+    createUserDto: CreateUserDto,
+  ): Promise<ResponseDto> {
+    const userDto = this.userService.create(createUserDto);
+
+    return this.responseService.toDtoResponse(
+      HttpStatus.CREATED,
+      'User created Successfully',
       userDto,
     );
   }
