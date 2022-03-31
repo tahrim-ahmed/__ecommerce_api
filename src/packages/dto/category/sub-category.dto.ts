@@ -3,6 +3,7 @@ import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CategoryDto } from './category.dto';
 import { BaseDto } from '../core/base.dto';
+import { ProductDto } from '../product/product.dto';
 
 export class SubCategoryDto extends BaseDto {
   @ApiProperty()
@@ -13,4 +14,7 @@ export class SubCategoryDto extends BaseDto {
 
   @Type(() => CategoryDto)
   category: CategoryDto;
+
+  @Type(() => ProductDto)
+  products: ProductDto;
 }

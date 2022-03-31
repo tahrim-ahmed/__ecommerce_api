@@ -17,21 +17,21 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ApiImplicitQuery } from '@nestjs/swagger/dist/decorators/api-implicit-query.decorator';
-import { SubCategoryService } from '../services/sub-category.service';
+import { ProductService } from '../services/product.service';
 import { ResponseService } from '../../../packages/services/response.service';
 import { RequestService } from '../../../packages/services/request.service';
 import { IntValidationPipe } from '../../../packages/pipes/int-validation.pipe';
 import { ResponseDto } from '../../../packages/dto/response/response.dto';
-import { CreateSubCategoryDto } from '../../../packages/dto/create/create-sub-category.dto';
 import { DtoValidationPipe } from '../../../packages/pipes/dto-validation.pipe';
 import { UuidValidationPipe } from '../../../packages/pipes/uuid-validation.pipe';
+import { CreateProductDto } from '../../../packages/dto/create/create-product.dto';
 
-@ApiTags('Sub-Category')
+@ApiTags('Product')
 @ApiBearerAuth()
-@Controller('sub-category')
-export class SubCategoryController {
+@Controller('product')
+export class ProductController {
   constructor(
-    private subCategoryService: SubCategoryService,
+    private productService: ProductService,
     private readonly responseService: ResponseService,
     private readonly requestService: RequestService,
   ) {}
@@ -47,7 +47,12 @@ export class SubCategoryController {
     type: String,
   })
   @ApiImplicitQuery({
-    name: 'categoryID',
+    name: 'subCategoryID',
+    required: false,
+    type: String,
+  })
+  @ApiImplicitQuery({
+    name: 'brandID',
     required: false,
     type: String,
   })
@@ -60,13 +65,15 @@ export class SubCategoryController {
   search(
     @Query('page', new IntValidationPipe()) page: number,
     @Query('limit', new IntValidationPipe()) limit: number,
-    @Query('categoryID') categoryID: string,
+    @Query('subCategoryID') subCategoryID: string,
+    @Query('brandID') brandID: string,
     @Query('search') search: string,
   ): Promise<ResponseDto> {
-    const allSubCategory = this.subCategoryService.search(
+    const allProduct = this.productService.search(
       page,
       limit,
-      categoryID,
+      subCategoryID,
+      brandID,
       search,
     );
     return this.responseService.toPaginationResponse(
@@ -74,7 +81,7 @@ export class SubCategoryController {
       null,
       page,
       limit,
-      allSubCategory,
+      allProduct,
     );
   }
 
@@ -111,7 +118,7 @@ export class SubCategoryController {
     @Query('order') order: string,
     @Query('search') search: string,
   ): Promise<ResponseDto> {
-    const allSubCategory = this.subCategoryService.pagination(
+    const allProduct = this.productService.pagination(
       page,
       limit,
       sort,
@@ -123,14 +130,14 @@ export class SubCategoryController {
       null,
       page,
       limit,
-      allSubCategory,
+      allProduct,
     );
   }
 
   @ApiCreatedResponse({
-    description: 'Sub-category successfully added!!',
+    description: 'Product successfully added!!',
   })
-  @ApiBody({ type: CreateSubCategoryDto })
+  @ApiBody({ type: CreateProductDto })
   @Post()
   create(
     @Body(
@@ -139,21 +146,21 @@ export class SubCategoryController {
         forbidNonWhitelisted: true,
       }),
     )
-    createSubCategoryDto: CreateSubCategoryDto,
+    createProductDto: CreateProductDto,
   ): Promise<ResponseDto> {
-    const modifiedDto = this.requestService.forCreate(createSubCategoryDto);
-    const region = this.subCategoryService.create(modifiedDto);
+    const modifiedDto = this.requestService.forCreate(createProductDto);
+    const region = this.productService.create(modifiedDto);
     return this.responseService.toDtoResponse(
       HttpStatus.CREATED,
-      'Sub-category successfully added!!',
+      'Product successfully added!!',
       region,
     );
   }
 
   @ApiOkResponse({
-    description: 'Sub-category successfully updated!!',
+    description: 'Product successfully updated!!',
   })
-  @ApiBody({ type: CreateSubCategoryDto })
+  @ApiBody({ type: CreateProductDto })
   @Put(':id')
   update(
     @Param('id', new UuidValidationPipe()) id: string,
@@ -164,26 +171,26 @@ export class SubCategoryController {
         forbidNonWhitelisted: true,
       }),
     )
-    createSubCategoryDto: CreateSubCategoryDto,
+    createProductDto: CreateProductDto,
   ): Promise<ResponseDto> {
-    const modifiedDto = this.requestService.forUpdate(createSubCategoryDto);
-    const region = this.subCategoryService.update(id, modifiedDto);
+    const modifiedDto = this.requestService.forUpdate(createProductDto);
+    const region = this.productService.update(id, modifiedDto);
     return this.responseService.toDtoResponse(
       HttpStatus.OK,
-      'Sub-category successfully updated!!',
+      'Product successfully updated!!',
       region,
     );
   }
 
-  @ApiOkResponse({ description: 'Sub-category successfully deleted!' })
+  @ApiOkResponse({ description: 'Product successfully deleted!' })
   @Delete(':id')
   remove(
     @Param('id', new UuidValidationPipe()) id: string,
   ): Promise<ResponseDto> {
-    const deleted = this.subCategoryService.remove(id);
+    const deleted = this.productService.remove(id);
     return this.responseService.toResponse(
       HttpStatus.OK,
-      'Sub-category successfully deleted!',
+      'Product successfully deleted!',
       deleted,
     );
   }
