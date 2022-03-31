@@ -12,6 +12,7 @@ import { CustomUserGroupDto } from '../../../packages/dto/user/custom-user-group
 import { RoleName } from '../../../packages/enum/group-name.enum';
 import { ChangePasswordDto } from '../../../packages/dto/user/change-password.dto';
 import * as fs from 'fs';
+import { UserPermissionDto } from '../../../packages/dto/user/user-permission.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,14 @@ export class AuthService {
 
       if (user) {
         const userRoles = await this.userService.findRolesByUserId(user.id);
-        const userResponseDto = await this.generatePayload(user, userRoles);
+        const userPermissions = await this.userService.findPermissionByUserId(
+          user.id,
+        );
+        const userResponseDto = await this.generatePayload(
+          user,
+          userRoles,
+          userPermissions,
+        );
 
         delete user.password;
 
@@ -77,6 +85,7 @@ export class AuthService {
   async generatePayload(
     userDto: UserDto,
     userRoles: UserGroupDto[],
+    userPermissions: UserPermissionDto[],
   ): Promise<UserResponseDto> {
     let isSuperAdmin = false;
     let isAdmin = false;
@@ -107,6 +116,7 @@ export class AuthService {
     userResponseDto.userName =
       (userDto.firstName || '') + ' ' + (userDto.lastName || '');
     userResponseDto.group = customUserGroupDtos;
+    userResponseDto.permission = userPermissions[0].permission;
 
     userResponseDto.isSuperAdmin = isSuperAdmin;
     userResponseDto.isAdmin = isAdmin;

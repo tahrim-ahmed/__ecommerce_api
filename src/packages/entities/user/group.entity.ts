@@ -12,10 +12,7 @@ export class GroupEntity extends CustomBaseEntity {
   @Column({ type: 'varchar', name: 'description', length: 255 })
   description: string;
 
-  @OneToMany(
-    () => UserGroupEntity,
-    (userGroupPermissionEntity) => userGroupPermissionEntity.group,
-  )
+  @OneToMany(() => UserGroupEntity, (userGroupEntity) => userGroupEntity.group)
   @JoinColumn({ name: 'group_id' })
   users: UserGroupEntity;
 }

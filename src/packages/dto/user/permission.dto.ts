@@ -2,8 +2,8 @@ import { IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { BaseDto } from '../core/base.dto';
-import { UserGroupDto } from './user-group.dto';
 import { BooleanType } from '../../enum/boolean-type.enum';
+import { UserPermissionDto } from './user-permission.dto';
 
 export class PermissionDto extends BaseDto {
   @ApiProperty()
@@ -113,6 +113,6 @@ export class PermissionDto extends BaseDto {
   @IsEnum(BooleanType, { message: 'Must be a valid type [0-1]' })
   orderDelete: BooleanType;
 
-  @Type(() => UserGroupDto)
-  users: UserGroupDto;
+  @Type(() => UserPermissionDto)
+  users: UserPermissionDto;
 }

@@ -25,6 +25,7 @@ import { PermissionEntity } from '../../../packages/entities/user/permission.ent
 import { UserPermissionEntity } from '../../../packages/entities/user/user-permission.entity';
 import { PermissionName } from '../../../packages/enum/permission-name.enum';
 import { PermissionTypeEnum } from '../../../packages/enum/permission-type.enum';
+import { UserPermissionDto } from '../../../packages/dto/user/user-permission.dto';
 
 @Injectable()
 export class UserService {
@@ -420,6 +421,20 @@ export class UserService {
         .innerJoinAndSelect('userRole.group', 'group')
         .getMany();
       return plainToClass(UserGroupDto, userRoles);
+    } catch (error) {
+      throw new SystemException(error);
+    }
+  };
+
+  findPermissionByUserId = async (id: string): Promise<UserPermissionDto[]> => {
+    try {
+      const query =
+        this.userPermissionRepository.createQueryBuilder('userPermission');
+      const userPermission = await query
+        .innerJoin('userPermission.user', 'user', 'user.id=:id', { id })
+        .innerJoinAndSelect('userPermission.permission', 'permission')
+        .getMany();
+      return plainToClass(UserPermissionDto, userPermission);
     } catch (error) {
       throw new SystemException(error);
     }
