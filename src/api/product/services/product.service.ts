@@ -57,6 +57,8 @@ export class ProductService {
       query
         .innerJoin('q.subCategory', 'subCategory')
         .addSelect(['subCategory.name'])
+        .innerJoin('subCategory.category', 'category')
+        .addSelect(['category.name'])
         .innerJoin('q.brand', 'brand')
         .addSelect(['brand.name']);
 
@@ -81,6 +83,8 @@ export class ProductService {
       query
         .innerJoin('q.subCategory', 'subCategory')
         .addSelect(['subCategory.name'])
+        .innerJoin('subCategory.category', 'category')
+        .addSelect(['category.name'])
         .innerJoin('q.brand', 'brand')
         .addSelect(['brand.name']);
 
