@@ -8,6 +8,9 @@ import { UserModule } from './api/users/user.module';
 import { AuthModule } from './api/auth/auth.module';
 import { FilesModule } from './api/files/files.module';
 import { CategoryModule } from './api/category/category.module';
+import { SubCategoryModule } from './api/category/sub-category.module';
+import { BrandModule } from './api/brand/brand.module';
+import { ProductModule } from './api/product/product.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { CategoryModule } from './api/category/category.module';
     UserModule,
     FilesModule,
     CategoryModule,
+    SubCategoryModule,
+    BrandModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [],

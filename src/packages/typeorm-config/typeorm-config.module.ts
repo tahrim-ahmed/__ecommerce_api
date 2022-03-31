@@ -8,6 +8,8 @@ import { PermissionEntity } from '../entities/user/permission.entity';
 import { UserPermissionEntity } from '../entities/user/user-permission.entity';
 import { CategoryEntity } from '../entities/category/category.entity';
 import { SubCategoryEntity } from '../entities/category/sub-category.entity';
+import { BrandEntity } from '../entities/brand/brand.entity';
+import { ProductEntity } from '../entities/product/product.entity';
 
 @Global()
 @Module({
@@ -29,6 +31,8 @@ import { SubCategoryEntity } from '../entities/category/sub-category.entity';
           UserPermissionEntity,
           CategoryEntity,
           SubCategoryEntity,
+          BrandEntity,
+          ProductEntity,
         ],
         synchronize: <boolean>(
           (configService.get<number>('DATABASE_SYNCRONIZE') == 1)
