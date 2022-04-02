@@ -10,6 +10,7 @@ import { CategoryEntity } from '../entities/category/category.entity';
 import { SubCategoryEntity } from '../entities/category/sub-category.entity';
 import { BrandEntity } from '../entities/brand/brand.entity';
 import { ProductEntity } from '../entities/product/product.entity';
+import { ColorDetailsEntity } from '../entities/color_details/color-details.entity';
 
 @Global()
 @Module({
@@ -33,6 +34,7 @@ import { ProductEntity } from '../entities/product/product.entity';
           SubCategoryEntity,
           BrandEntity,
           ProductEntity,
+          ColorDetailsEntity,
         ],
         synchronize: <boolean>(
           (configService.get<number>('DATABASE_SYNCRONIZE') == 1)

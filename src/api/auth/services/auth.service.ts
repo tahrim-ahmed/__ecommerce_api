@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as jwt from 'jsonwebtoken';
 import { BcryptService } from '../../../packages/services/bcrypt.service';
 import { UserService } from '../../users/service/user.service';
 import { LoginDto } from '../../../packages/dto/user/login.dto';
@@ -11,8 +10,9 @@ import { UserGroupDto } from '../../../packages/dto/user/user-group.dto';
 import { CustomUserGroupDto } from '../../../packages/dto/user/custom-user-group.dto';
 import { RoleName } from '../../../packages/enum/group-name.enum';
 import { ChangePasswordDto } from '../../../packages/dto/user/change-password.dto';
-import * as fs from 'fs';
 import { UserPermissionDto } from '../../../packages/dto/user/user-permission.dto';
+import * as fs from 'fs';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
