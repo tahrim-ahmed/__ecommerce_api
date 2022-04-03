@@ -10,12 +10,14 @@ import { ProductEntity } from '../../packages/entities/product/product.entity';
 import { SubCategoryModule } from '../category/sub-category.module';
 import { BrandModule } from '../brand/brand.module';
 import { ColorDetailsEntity } from '../../packages/entities/color-details/color-details.entity';
+import { UnitModule } from '../unit/unit.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProductEntity, ColorDetailsEntity]),
     SubCategoryModule,
     BrandModule,
+    UnitModule,
   ],
   controllers: [ProductController],
   exports: [ProductService],

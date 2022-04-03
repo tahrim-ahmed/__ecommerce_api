@@ -14,6 +14,7 @@ import { SubCategoryService } from '../../category/services/sub-category.service
 import { BrandService } from '../../brand/services/brand.service';
 import { ColorDetailsEntity } from '../../../packages/entities/color-details/color-details.entity';
 import { ColorDetailsDto } from '../../../packages/dto/color-details/color-details.dto';
+import { UnitService } from '../../unit/services/unit.service';
 
 @Injectable()
 export class ProductService {
@@ -27,6 +28,7 @@ export class ProductService {
     private readonly requestService: RequestService,
     private readonly subCategoryService: SubCategoryService,
     private readonly brandService: BrandService,
+    private readonly unitService: UnitService,
   ) {}
 
   search = async (
@@ -135,6 +137,8 @@ export class ProductService {
 
       productDto.brand = await this.brandService.getBrand(productDto.brandID);
 
+      productDto.unit = await this.unitService.getUnit(productDto.unitID);
+
       const colorDetails: ColorDetailsEntity[] = [];
 
       for (const details of productDto.createColorDetailsDto) {
@@ -173,6 +177,10 @@ export class ProductService {
 
       if (productDto.brandID) {
         productDto.brand = await this.brandService.getBrand(productDto.brandID);
+      }
+
+      if (productDto.unitID) {
+        productDto.unit = await this.unitService.getUnit(productDto.unitID);
       }
 
       if (productDto.createColorDetailsDto.length) {

@@ -11,6 +11,7 @@ import { BaseDto } from '../core/base.dto';
 import { SubCategoryDto } from '../category/sub-category.dto';
 import { BrandDto } from '../brand/brand.dto';
 import { ColorDetailsDto } from '../color-details/color-details.dto';
+import { UnitDto } from '../unit/unit.dto';
 
 export class ProductDto extends BaseDto {
   @ApiProperty()
@@ -45,6 +46,9 @@ export class ProductDto extends BaseDto {
 
   @Type(() => BrandDto)
   brand: BrandDto;
+
+  @Type(() => UnitDto)
+  unit: UnitDto;
 
   @Type(() => ColorDetailsDto)
   colorDetails: ColorDetailsDto[];

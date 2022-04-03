@@ -15,6 +15,11 @@ export class CreateProductDto extends ProductDto {
   @IsUUID('all', { message: 'Must be a valid brand ID' })
   brandID: string;
 
+  @ApiProperty()
+  @IsNotEmpty({ message: 'Unit ID must be defined' })
+  @IsUUID('all', { message: 'Must be a valid unit ID' })
+  unitID: string;
+
   @ApiProperty({
     type: [CreateColorDetailsDto],
   })
