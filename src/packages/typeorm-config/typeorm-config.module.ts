@@ -10,7 +10,7 @@ import { CategoryEntity } from '../entities/category/category.entity';
 import { SubCategoryEntity } from '../entities/category/sub-category.entity';
 import { BrandEntity } from '../entities/brand/brand.entity';
 import { ProductEntity } from '../entities/product/product.entity';
-import { ColorDetailsEntity } from '../entities/color_details/color-details.entity';
+import { ColorDetailsEntity } from '../entities/color-details/color-details.entity';
 
 @Global()
 @Module({

@@ -9,7 +9,7 @@ import {
 import { CustomBaseEntity } from '../core/custom-base.entity';
 import { SubCategoryEntity } from '../category/sub-category.entity';
 import { BrandEntity } from '../brand/brand.entity';
-import { ColorDetailsEntity } from '../color_details/color-details.entity';
+import { ColorDetailsEntity } from '../color-details/color-details.entity';
 
 @Entity({ name: 'products' })
 @Index('products-name-deletedat-idx', ['name', 'deletedAt'])

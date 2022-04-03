@@ -10,6 +10,7 @@ import { Type } from 'class-transformer';
 import { BaseDto } from '../core/base.dto';
 import { SubCategoryDto } from '../category/sub-category.dto';
 import { BrandDto } from '../brand/brand.dto';
+import { ColorDetailsDto } from '../color-details/color-details.dto';
 
 export class ProductDto extends BaseDto {
   @ApiProperty()
@@ -27,21 +28,24 @@ export class ProductDto extends BaseDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'price can not be empty' })
   @IsNumber({ maxDecimalPlaces: 2 })
-  price: string;
+  price: number;
 
   @ApiProperty()
   @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
-  discount: string;
+  discount: number;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'quantity can not be empty' })
   @IsNumber()
-  quantity: string;
+  quantity: number;
 
   @Type(() => SubCategoryDto)
   subCategory: SubCategoryDto;
 
   @Type(() => BrandDto)
   brand: BrandDto;
+
+  @Type(() => ColorDetailsDto)
+  colorDetails: ColorDetailsDto[];
 }

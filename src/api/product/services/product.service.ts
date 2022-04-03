@@ -12,12 +12,16 @@ import { CreateProductDto } from '../../../packages/dto/create/create-product.dt
 import { ProductEntity } from '../../../packages/entities/product/product.entity';
 import { SubCategoryService } from '../../category/services/sub-category.service';
 import { BrandService } from '../../brand/services/brand.service';
+import { ColorDetailsEntity } from '../../../packages/entities/color-details/color-details.entity';
+import { ColorDetailsDto } from '../../../packages/dto/color-details/color-details.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    @InjectRepository(ColorDetailsEntity)
+    private readonly colorDetailsRepository: Repository<ColorDetailsEntity>,
     private readonly exceptionService: ExceptionService,
     private readonly permissionService: PermissionService,
     private readonly requestService: RequestService,
@@ -123,22 +127,32 @@ export class ProductService {
     }
   };
 
-  create = async (createProductDto: CreateProductDto): Promise<ProductDto> => {
+  create = async (productDto: CreateProductDto): Promise<ProductDto> => {
     try {
-      createProductDto.subCategory =
-        await this.subCategoryService.getSubCategory(
-          createProductDto.subCategoryID,
-        );
-
-      createProductDto.brand = await this.brandService.getBrand(
-        createProductDto.brandID,
+      productDto.subCategory = await this.subCategoryService.getSubCategory(
+        productDto.subCategoryID,
       );
 
-      const product = this.productRepository.create(createProductDto);
+      productDto.brand = await this.brandService.getBrand(productDto.brandID);
 
+      const colorDetails: ColorDetailsEntity[] = [];
+
+      for (const details of productDto.createColorDetailsDto) {
+        let clrDetails = new ColorDetailsEntity();
+        clrDetails.name = details.name;
+        clrDetails =
+          this.requestService.forCreate<ColorDetailsEntity>(clrDetails);
+
+        const created = this.colorDetailsRepository.create(clrDetails);
+        colorDetails.push(await this.colorDetailsRepository.save(created));
+      }
+
+      productDto.colorDetails = plainToInstance(ColorDetailsDto, colorDetails);
+
+      const product = this.productRepository.create(productDto);
       await this.productRepository.save(product);
 
-      return plainToClass(ProductDto, product);
+      return this.getProduct(product.id);
     } catch (error) {
       throw new SystemException(error);
     }
