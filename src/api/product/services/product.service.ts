@@ -160,27 +160,52 @@ export class ProductService {
 
   update = async (
     id: string,
-    createProductDto: CreateProductDto,
+    productDto: CreateProductDto,
   ): Promise<ProductDto> => {
     try {
       const savedProduct = await this.getProduct(id);
 
-      if (createProductDto.subCategoryID) {
-        createProductDto.subCategory =
-          await this.subCategoryService.getSubCategory(
-            createProductDto.subCategoryID,
-          );
+      if (productDto.subCategoryID) {
+        productDto.subCategory = await this.subCategoryService.getSubCategory(
+          productDto.subCategoryID,
+        );
       }
 
-      if (createProductDto.brandID) {
-        createProductDto.brand = await this.brandService.getBrand(
-          createProductDto.brandID,
+      if (productDto.brandID) {
+        productDto.brand = await this.brandService.getBrand(productDto.brandID);
+      }
+
+      if (productDto.createColorDetailsDto.length) {
+        const colorDetails: ColorDetailsEntity[] = [];
+
+        for (const details of productDto.createColorDetailsDto) {
+          const oldColorDetail = await this.getColorDetailByProductID(id);
+
+          await this.removeColorDetails(id);
+
+          let clrDetails = new ColorDetailsEntity();
+          clrDetails.name = details.name;
+
+          // preserve the previous date
+          clrDetails.createdBy = oldColorDetail.createdBy;
+          clrDetails.createdAt = oldColorDetail.createdAt;
+
+          clrDetails =
+            this.requestService.forUpdate<ColorDetailsEntity>(clrDetails);
+
+          const created = this.colorDetailsRepository.create(clrDetails);
+          colorDetails.push(await this.colorDetailsRepository.save(created));
+        }
+
+        productDto.colorDetails = plainToInstance(
+          ColorDetailsDto,
+          colorDetails,
         );
       }
 
       await this.productRepository.save({
         ...savedProduct,
-        ...createProductDto,
+        ...productDto,
       });
 
       return this.getProduct(id);
@@ -191,10 +216,10 @@ export class ProductService {
 
   remove = async (id: string): Promise<DeleteDto> => {
     try {
-      const deletedSubCategory = await this.productRepository.softDelete({
+      const deletedProduct = await this.productRepository.softDelete({
         id,
       });
-      return Promise.resolve(new DeleteDto(!!deletedSubCategory.affected));
+      return Promise.resolve(new DeleteDto(!!deletedProduct.affected));
     } catch (error) {
       throw new SystemException(error);
     }
@@ -212,5 +237,26 @@ export class ProductService {
     this.exceptionService.notFound(product, 'Product Not Found!!');
     return plainToClass(ProductDto, product);
   };
+
+  getColorDetailByProductID = async (
+    productID: string,
+  ): Promise<ColorDetailsDto> => {
+    const colorDetail = await this.colorDetailsRepository
+      .createQueryBuilder('q')
+      .where('q.product_id =:prdID', { prdID: productID })
+      .getOne();
+    this.exceptionService.notFound(colorDetail, 'Color Details Not Found!!');
+
+    return plainToInstance(ColorDetailsDto, colorDetail);
+  };
+
+  async removeColorDetails(productID: string): Promise<boolean> {
+    return !!(await this.colorDetailsRepository
+      .createQueryBuilder('q')
+      .where('q.product_id =:prdID', {
+        prdID: productID,
+      })
+      .delete());
+  }
   /*********************** End checking relations of post *********************/
 }
