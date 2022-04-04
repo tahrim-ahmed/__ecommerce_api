@@ -10,10 +10,13 @@ import { BcryptService } from '../../packages/services/bcrypt.service';
 import { UserPermissionEntity } from '../../packages/entities/user/user-permission.entity';
 import { PermissionSeeder } from './services/permission.seeder';
 import { PermissionEntity } from '../../packages/entities/user/permission.entity';
+import { OrderStatusEntity } from '../../packages/entities/order-status/order-status.entity';
+import { OrderStatusSeeder } from './order-status/order-status.seeder';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      OrderStatusEntity,
       UserEntity,
       GroupEntity,
       PermissionEntity,
@@ -23,6 +26,7 @@ import { PermissionEntity } from '../../packages/entities/user/permission.entity
   ],
   providers: [
     BcryptService,
+    OrderStatusSeeder,
     UserSeeder,
     GroupSeeder,
     PermissionSeeder,
