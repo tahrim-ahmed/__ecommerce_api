@@ -194,7 +194,6 @@ export class ProductService {
           let clrDetails = new ColorDetailsEntity();
           clrDetails.name = details.name;
 
-          // preserve the previous date
           clrDetails.createdBy = oldColorDetail.createdBy;
           clrDetails.createdAt = oldColorDetail.createdAt;
 

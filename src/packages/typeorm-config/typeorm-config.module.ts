@@ -11,6 +11,8 @@ import { SubCategoryEntity } from '../entities/category/sub-category.entity';
 import { BrandEntity } from '../entities/brand/brand.entity';
 import { ProductEntity } from '../entities/product/product.entity';
 import { ColorDetailsEntity } from '../entities/color-details/color-details.entity';
+import { UnitEntity } from '../entities/unit/unit.entity';
+import { OrderStatusEntity } from '../entities/order-status/order-status.entity';
 
 @Global()
 @Module({
@@ -30,6 +32,8 @@ import { ColorDetailsEntity } from '../entities/color-details/color-details.enti
           GroupEntity,
           PermissionEntity,
           UserPermissionEntity,
+          UnitEntity,
+          OrderStatusEntity,
           CategoryEntity,
           SubCategoryEntity,
           BrandEntity,

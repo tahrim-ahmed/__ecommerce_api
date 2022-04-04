@@ -11,6 +11,8 @@ import { CategoryModule } from './api/category/category.module';
 import { SubCategoryModule } from './api/category/sub-category.module';
 import { BrandModule } from './api/brand/brand.module';
 import { ProductModule } from './api/product/product.module';
+import { UnitModule } from './api/unit/unit.module';
+import { OrderStatusModule } from './api/order-status/order-status.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { ProductModule } from './api/product/product.module';
     GroupModule,
     UserModule,
     FilesModule,
+    UnitModule,
+    OrderStatusModule,
     CategoryModule,
     SubCategoryModule,
     BrandModule,
