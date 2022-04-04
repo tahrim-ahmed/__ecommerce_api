@@ -10,7 +10,7 @@ import { Type } from 'class-transformer';
 import { BaseDto } from '../core/base.dto';
 import { SubCategoryDto } from '../category/sub-category.dto';
 import { BrandDto } from '../brand/brand.dto';
-import { ColorDetailsDto } from '../color-details/color-details.dto';
+import { VariationDto } from '../variation/variation.dto';
 import { UnitDto } from '../unit/unit.dto';
 
 export class ProductDto extends BaseDto {
@@ -50,6 +50,6 @@ export class ProductDto extends BaseDto {
   @Type(() => UnitDto)
   unit: UnitDto;
 
-  @Type(() => ColorDetailsDto)
-  colorDetails: ColorDetailsDto[];
+  @Type(() => VariationDto)
+  variations: VariationDto[];
 }

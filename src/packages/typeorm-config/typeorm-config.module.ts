@@ -10,7 +10,7 @@ import { CategoryEntity } from '../entities/category/category.entity';
 import { SubCategoryEntity } from '../entities/category/sub-category.entity';
 import { BrandEntity } from '../entities/brand/brand.entity';
 import { ProductEntity } from '../entities/product/product.entity';
-import { ColorDetailsEntity } from '../entities/color-details/color-details.entity';
+import { VariationEntity } from '../entities/variation/variation.entity';
 import { UnitEntity } from '../entities/unit/unit.entity';
 import { OrderStatusEntity } from '../entities/order-status/order-status.entity';
 
@@ -38,7 +38,7 @@ import { OrderStatusEntity } from '../entities/order-status/order-status.entity'
           SubCategoryEntity,
           BrandEntity,
           ProductEntity,
-          ColorDetailsEntity,
+          VariationEntity,
         ],
         synchronize: <boolean>(
           (configService.get<number>('DATABASE_SYNCRONIZE') == 1)

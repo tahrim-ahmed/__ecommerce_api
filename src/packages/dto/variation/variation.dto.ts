@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 import { BaseDto } from '../core/base.dto';
 import { ProductDto } from '../product/product.dto';
 
-export class ColorDetailsDto extends BaseDto {
+export class VariationDto extends BaseDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'Name can not be empty' })
   @IsString({ message: 'Name must be a string' })

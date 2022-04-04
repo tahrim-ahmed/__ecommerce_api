@@ -2,14 +2,14 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { CustomBaseEntity } from '../core/custom-base.entity';
 import { ProductEntity } from '../product/product.entity';
 
-@Entity({ name: 'color-details' })
-@Index('color-details-name-deletedat-idx', ['name', 'deletedAt'])
-export class ColorDetailsEntity extends CustomBaseEntity {
+@Entity({ name: 'variation' })
+@Index('variation-name-deletedat-idx', ['name', 'deletedAt'])
+export class VariationEntity extends CustomBaseEntity {
   @Column({ type: 'varchar', name: 'name', length: 255 })
-  @Index('color-details-name-idx', { unique: true })
+  @Index('variation-name-idx', { unique: true })
   name: string;
 
-  @ManyToOne(() => ProductEntity, (productEntity) => productEntity.colorDetails)
+  @ManyToOne(() => ProductEntity, (productEntity) => productEntity.variation)
   @JoinColumn({ name: 'product_id' })
   product: ProductEntity;
 }

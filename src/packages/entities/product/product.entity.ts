@@ -9,7 +9,7 @@ import {
 import { CustomBaseEntity } from '../core/custom-base.entity';
 import { SubCategoryEntity } from '../category/sub-category.entity';
 import { BrandEntity } from '../brand/brand.entity';
-import { ColorDetailsEntity } from '../color-details/color-details.entity';
+import { VariationEntity } from '../variation/variation.entity';
 import { UnitEntity } from '../unit/unit.entity';
 
 @Entity({ name: 'products' })
@@ -47,9 +47,9 @@ export class ProductEntity extends CustomBaseEntity {
   unit: UnitEntity;
 
   @OneToMany(
-    () => ColorDetailsEntity,
-    (colorDetailsEntity) => colorDetailsEntity.product,
+    () => VariationEntity,
+    (variationEntity) => variationEntity.product,
   )
   @JoinColumn({ name: 'product_id' })
-  colorDetails: ColorDetailsEntity[];
+  variation: VariationEntity[];
 }

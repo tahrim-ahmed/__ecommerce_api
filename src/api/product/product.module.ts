@@ -9,12 +9,12 @@ import { PermissionService } from '../../packages/services/permission.service';
 import { ProductEntity } from '../../packages/entities/product/product.entity';
 import { SubCategoryModule } from '../category/sub-category.module';
 import { BrandModule } from '../brand/brand.module';
-import { ColorDetailsEntity } from '../../packages/entities/color-details/color-details.entity';
+import { VariationEntity } from '../../packages/entities/variation/variation.entity';
 import { UnitModule } from '../unit/unit.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ProductEntity, ColorDetailsEntity]),
+    TypeOrmModule.forFeature([ProductEntity, VariationEntity]),
     SubCategoryModule,
     BrandModule,
     UnitModule,

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
 import { ProductDto } from '../product/product.dto';
-import { CreateColorDetailsDto } from './create-color-details.dto';
+import { CreateVariationDto } from './create-variation.dto';
 import { Type } from 'class-transformer';
 
 export class CreateProductDto extends ProductDto {
@@ -21,11 +21,11 @@ export class CreateProductDto extends ProductDto {
   unitID: string;
 
   @ApiProperty({
-    type: [CreateColorDetailsDto],
+    type: [CreateVariationDto],
   })
-  @Type(() => CreateColorDetailsDto)
+  @Type(() => CreateVariationDto)
   @ValidateNested({
     each: true,
   })
-  createColorDetailsDto: CreateColorDetailsDto[];
+  createVariationDto: CreateVariationDto[];
 }

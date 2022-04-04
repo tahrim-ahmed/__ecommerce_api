@@ -12,8 +12,8 @@ import { CreateProductDto } from '../../../packages/dto/create/create-product.dt
 import { ProductEntity } from '../../../packages/entities/product/product.entity';
 import { SubCategoryService } from '../../category/services/sub-category.service';
 import { BrandService } from '../../brand/services/brand.service';
-import { ColorDetailsEntity } from '../../../packages/entities/color-details/color-details.entity';
-import { ColorDetailsDto } from '../../../packages/dto/color-details/color-details.dto';
+import { VariationEntity } from '../../../packages/entities/variation/variation.entity';
+import { VariationDto } from '../../../packages/dto/variation/variation.dto';
 import { UnitService } from '../../unit/services/unit.service';
 
 @Injectable()
@@ -21,8 +21,8 @@ export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
-    @InjectRepository(ColorDetailsEntity)
-    private readonly colorDetailsRepository: Repository<ColorDetailsEntity>,
+    @InjectRepository(VariationEntity)
+    private readonly variationRepository: Repository<VariationEntity>,
     private readonly exceptionService: ExceptionService,
     private readonly permissionService: PermissionService,
     private readonly requestService: RequestService,
@@ -139,19 +139,19 @@ export class ProductService {
 
       productDto.unit = await this.unitService.getUnit(productDto.unitID);
 
-      const colorDetails: ColorDetailsEntity[] = [];
+      const colorDetails: VariationEntity[] = [];
 
-      for (const details of productDto.createColorDetailsDto) {
-        let clrDetails = new ColorDetailsEntity();
+      for (const details of productDto.createVariationDto) {
+        let clrDetails = new VariationEntity();
         clrDetails.name = details.name;
-        clrDetails =
-          this.requestService.forCreate<ColorDetailsEntity>(clrDetails);
 
-        const created = this.colorDetailsRepository.create(clrDetails);
-        colorDetails.push(await this.colorDetailsRepository.save(created));
+        clrDetails = this.requestService.forCreate<VariationEntity>(clrDetails);
+
+        const created = this.variationRepository.create(clrDetails);
+        colorDetails.push(await this.variationRepository.save(created));
       }
 
-      productDto.colorDetails = plainToInstance(ColorDetailsDto, colorDetails);
+      productDto.variations = plainToInstance(VariationDto, colorDetails);
 
       const product = this.productRepository.create(productDto);
       await this.productRepository.save(product);
@@ -184,28 +184,28 @@ export class ProductService {
       }
 
       if (productDto.createColorDetailsDto.length) {
-        const colorDetails: ColorDetailsEntity[] = [];
+        const colorDetails: VariationEntity[] = [];
 
         for (const details of productDto.createColorDetailsDto) {
           const oldColorDetail = await this.getColorDetailByProductID(id);
 
           await this.removeColorDetails(id);
 
-          let clrDetails = new ColorDetailsEntity();
+          let clrDetails = new VariationEntity();
           clrDetails.name = details.name;
 
           clrDetails.createdBy = oldColorDetail.createdBy;
           clrDetails.createdAt = oldColorDetail.createdAt;
 
           clrDetails =
-            this.requestService.forUpdate<ColorDetailsEntity>(clrDetails);
+            this.requestService.forUpdate<VariationEntity>(clrDetails);
 
           const created = this.colorDetailsRepository.create(clrDetails);
           colorDetails.push(await this.colorDetailsRepository.save(created));
         }
 
         productDto.colorDetails = plainToInstance(
-          ColorDetailsDto,
+          VariationDto,
           colorDetails,
         );
       }
@@ -247,14 +247,14 @@ export class ProductService {
 
   getColorDetailByProductID = async (
     productID: string,
-  ): Promise<ColorDetailsDto> => {
+  ): Promise<VariationDto> => {
     const colorDetail = await this.colorDetailsRepository
       .createQueryBuilder('q')
       .where('q.product_id =:prdID', { prdID: productID })
       .getOne();
     this.exceptionService.notFound(colorDetail, 'Color Details Not Found!!');
 
-    return plainToInstance(ColorDetailsDto, colorDetail);
+    return plainToInstance(VariationDto, colorDetail);
   };
 
   async removeColorDetails(productID: string): Promise<boolean> {
