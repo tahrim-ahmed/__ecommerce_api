@@ -153,7 +153,7 @@ export class ProductService {
 
       productDto.variations = plainToInstance(VariationDto, colorDetails);
 
-      const product = this.productRepository.create(productDto);
+      const product = this.productRepository.create(productDto as ProductDto);
       await this.productRepository.save(product);
 
       return this.getProduct(product.id);
@@ -183,10 +183,10 @@ export class ProductService {
         productDto.unit = await this.unitService.getUnit(productDto.unitID);
       }
 
-      if (productDto.createColorDetailsDto.length) {
+      if (productDto.createVariationDto.length) {
         const colorDetails: VariationEntity[] = [];
 
-        for (const details of productDto.createColorDetailsDto) {
+        for (const details of productDto.createVariationDto) {
           const oldColorDetail = await this.getColorDetailByProductID(id);
 
           await this.removeColorDetails(id);
@@ -200,14 +200,11 @@ export class ProductService {
           clrDetails =
             this.requestService.forUpdate<VariationEntity>(clrDetails);
 
-          const created = this.colorDetailsRepository.create(clrDetails);
-          colorDetails.push(await this.colorDetailsRepository.save(created));
+          const created = this.variationRepository.create(clrDetails);
+          colorDetails.push(await this.variationRepository.save(created));
         }
 
-        productDto.colorDetails = plainToInstance(
-          VariationDto,
-          colorDetails,
-        );
+        productDto.variations = plainToInstance(VariationDto, colorDetails);
       }
 
       await this.productRepository.save({
@@ -248,7 +245,7 @@ export class ProductService {
   getColorDetailByProductID = async (
     productID: string,
   ): Promise<VariationDto> => {
-    const colorDetail = await this.colorDetailsRepository
+    const colorDetail = await this.variationRepository
       .createQueryBuilder('q')
       .where('q.product_id =:prdID', { prdID: productID })
       .getOne();
@@ -258,7 +255,7 @@ export class ProductService {
   };
 
   async removeColorDetails(productID: string): Promise<boolean> {
-    return !!(await this.colorDetailsRepository
+    return !!(await this.variationRepository
       .createQueryBuilder('q')
       .where('q.product_id =:prdID', {
         prdID: productID,

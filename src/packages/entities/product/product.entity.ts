@@ -23,13 +23,13 @@ export class ProductEntity extends CustomBaseEntity {
   description: string;
 
   @Column({ type: 'decimal', name: 'price' })
-  price: string;
+  price: number;
 
   @Column({ type: 'decimal', name: 'discount' })
-  discount: string;
+  discount: number;
 
   @Column({ type: 'decimal', name: 'quantity' })
-  quantity: string;
+  quantity: number;
 
   @ManyToOne(
     () => SubCategoryEntity,
