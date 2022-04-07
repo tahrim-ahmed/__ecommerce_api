@@ -46,7 +46,7 @@ export class SubCategoryService {
 
       query
         .innerJoin('q.category', 'category')
-        .addSelect(['category.name', 'category.id']);
+        .addSelect(['category.name']);
 
       const data = await query.getManyAndCount();
 

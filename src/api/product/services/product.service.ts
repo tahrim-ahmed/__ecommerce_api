@@ -139,22 +139,19 @@ export class ProductService {
 
       productDto.unit = await this.unitService.getUnit(productDto.unitID);
 
-      const colorDetails: VariationEntity[] = [];
+      const product = this.productRepository.create(productDto);
+      await this.productRepository.save(product);
 
       for (const details of productDto.createVariationDto) {
         let clrDetails = new VariationEntity();
+        clrDetails.product = product;
         clrDetails.name = details.name;
 
         clrDetails = this.requestService.forCreate<VariationEntity>(clrDetails);
 
         const created = this.variationRepository.create(clrDetails);
-        colorDetails.push(await this.variationRepository.save(created));
+        await this.variationRepository.save(created);
       }
-
-      productDto.variations = plainToInstance(VariationDto, colorDetails);
-
-      const product = this.productRepository.create(productDto as ProductDto);
-      await this.productRepository.save(product);
 
       return this.getProduct(product.id);
     } catch (error) {
